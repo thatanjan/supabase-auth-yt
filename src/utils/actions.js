@@ -15,7 +15,6 @@ const signInWith = provider => async () => {
     },
   })
 
-
   if (error) {
     console.log(error)
   }
@@ -38,7 +37,6 @@ const signupWithEmailPassword = async (prev, formData) => {
     email: formData.get('email'),
     password: formData.get('password'),
   })
-
 
   if (error) {
     console.log('error', error)
@@ -73,10 +71,56 @@ const signinWithEmailPassword = async (prev, formData) => {
   redirect('/')
 }
 
+const sendResetPasswordEmail = async (prev, formData) => {
+  const supabase = await createClientForServer()
+
+  const { data, error } = await supabase.auth.resetPasswordForEmail(
+    formData.get('email'),
+  )
+
+  if (error) {
+    console.log('error', error)
+
+    return {
+      success: '',
+      error: error.message,
+    }
+  }
+
+  return {
+    success: 'Please check your email',
+    error: '',
+  }
+}
+
+const updatePassword = async (prev, formData) => {
+  const supabase = await createClientForServer()
+
+  const { data, error } = await supabase.auth.updateUser({
+    password: formData.get('password'),
+  })
+
+  if (error) {
+    console.log('error', error)
+
+    return {
+      success: '',
+      error: error.message,
+    }
+  }
+
+  return {
+    success: 'Password updated',
+    error: '',
+  }
+}
+
 export {
   signinWithGoogle,
   signOut,
   signupWithEmailPassword,
   signinWithGithub,
   signinWithEmailPassword,
+  sendResetPasswordEmail,
+  updatePassword,
 }

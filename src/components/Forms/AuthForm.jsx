@@ -64,10 +64,15 @@ const AuthForm = () => {
           <Link className='link' href='/auth?authtype=signup'>
             Sign Up
           </Link>
+
+          <Link className='link' href='/reset'>
+            Forgot password?
+          </Link>
         </div>
       )}
 
-      <button type='submit' className='btn'>
+      <button type='submit' className='btn' disabled={isPending}>
+        {isPending && <span className='loading loading-spinner'></span>}
         {renderSubmitButtonText()}
       </button>
 
