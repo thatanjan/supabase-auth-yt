@@ -115,6 +115,28 @@ const updatePassword = async (prev, formData) => {
   }
 }
 
+const signinWithMagicLink = async (prev, formData) => {
+  const supabase = await createClientForServer()
+
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email: formData.get('email'),
+  })
+
+  if (error) {
+    console.log('error', error)
+
+    return {
+      success: null,
+      error: error.message,
+    }
+  }
+
+  return {
+    success: 'Please check your email',
+    error: null,
+  }
+}
+
 export {
   signinWithGoogle,
   signOut,
@@ -123,4 +145,5 @@ export {
   signinWithEmailPassword,
   sendResetPasswordEmail,
   updatePassword,
+  signinWithMagicLink,
 }

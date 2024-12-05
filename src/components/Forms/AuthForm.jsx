@@ -4,6 +4,7 @@ import {
   signinWithGithub,
   signinWithGoogle,
   signupWithEmailPassword,
+  signinWithMagicLink,
 } from '@/utils/actions'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -17,6 +18,9 @@ const AuthForm = () => {
     switch (authType) {
       case 'signup':
         return signupWithEmailPassword
+
+      case 'magic':
+        return signinWithMagicLink
 
       default:
         return signinWithEmailPassword
@@ -33,6 +37,9 @@ const AuthForm = () => {
       case 'signup':
         return 'Sign up'
 
+      case 'magic':
+        return 'Send magic link'
+
       default:
         return 'Sign in'
     }
@@ -40,20 +47,24 @@ const AuthForm = () => {
 
   const { error, success } = state
 
+  const isPasswordLess = authType === 'magic' || authType === 'otp'
+
   return (
     <form action={formAction} className='flex flex-col gap-2'>
       <label className='input input-bordered flex items-center gap-2'>
         <input type='email' className='grow' placeholder='Email' name='email' />
       </label>
 
-      <label className='input input-bordered flex items-center gap-2'>
-        <input
-          type='password'
-          className='grow'
-          placeholder='Password'
-          name='password'
-        />
-      </label>
+      {!isPasswordLess && (
+        <label className='input input-bordered flex items-center gap-2'>
+          <input
+            type='password'
+            className='grow'
+            placeholder='Password'
+            name='password'
+          />
+        </label>
+      )}
 
       {authType === 'signup' ? (
         <Link className='link' href='/auth'>
@@ -67,6 +78,18 @@ const AuthForm = () => {
 
           <Link className='link' href='/reset'>
             Forgot password?
+          </Link>
+        </div>
+      )}
+
+      {!isPasswordLess && (
+        <div className='flex justify-between'>
+          <Link className='link' href='/auth?authtype=otp'>
+            Use OTP
+          </Link>
+
+          <Link className='link' href='/auth?authtype=magic'>
+            Use Magic Link
           </Link>
         </div>
       )}
