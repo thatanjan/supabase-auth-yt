@@ -28,7 +28,7 @@ export default async function Home() {
 
   const userName = user_name ? `@${user_name}` : 'User Name Not Set'
 
-  console.log(session)
+  // console.log(session)
 
   return (
     <div className=''>

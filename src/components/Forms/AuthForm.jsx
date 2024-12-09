@@ -5,6 +5,7 @@ import {
   signinWithGoogle,
   signupWithEmailPassword,
   signinWithMagicLink,
+  signinWithOtp,
 } from '@/utils/actions'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -21,6 +22,9 @@ const AuthForm = () => {
 
       case 'magic':
         return signinWithMagicLink
+
+      case 'otp':
+        return signinWithOtp
 
       default:
         return signinWithEmailPassword
@@ -39,6 +43,9 @@ const AuthForm = () => {
 
       case 'magic':
         return 'Send magic link'
+
+      case 'otp':
+        return 'Send OTP'
 
       default:
         return 'Sign in'

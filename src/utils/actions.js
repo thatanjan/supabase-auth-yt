@@ -137,6 +137,48 @@ const signinWithMagicLink = async (prev, formData) => {
   }
 }
 
+const signinWithOtp = async (prev, formData) => {
+  const supabase = await createClientForServer()
+
+  const email = formData.get('email')
+
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email,
+  })
+
+  if (error) {
+    console.log('error', error)
+
+    return {
+      success: null,
+      error: error.message,
+    }
+  }
+
+  redirect(`/verify-otp?email=${email}`)
+}
+
+const verifyOtp = async (prev, formData) => {
+  const supabase = await createClientForServer()
+
+  const { data, error } = await supabase.auth.verifyOtp({
+    token: formData.get('token'),
+    email: prev.email,
+    type: 'email',
+  })
+
+  if (error) {
+    console.log('error', error)
+
+    return {
+      success: null,
+      error: error.message,
+    }
+  }
+
+  redirect('/')
+}
+
 export {
   signinWithGoogle,
   signOut,
@@ -146,4 +188,6 @@ export {
   sendResetPasswordEmail,
   updatePassword,
   signinWithMagicLink,
+  signinWithOtp,
+  verifyOtp,
 }
